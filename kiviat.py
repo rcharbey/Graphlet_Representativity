@@ -10,12 +10,13 @@ Created on Thu Feb 14 18:51:03 2019
 import csv
 import os
 import pdfkit
+import sys
 
 class kiviat(object):
     def __init__(self, folder):
         self.folder = folder
         self.file_in = folder+'/kmeans_stats.csv'
-        self.svg_folder = 'SVG'
+        self.svg_folder = sys.path[0] + '/SVG'
         
         self.list_graphlets = {
                 6 : [4,5,6,7,8,9],
@@ -54,7 +55,7 @@ class kiviat(object):
             all_temp.append(clusters[i])
         
         self.nb_clusters = nb_clusters
-        self.axes = [os.path.expanduser('../../../%s/pattern%s.svg' % (self.svg_folder, graphlet)) for graphlet in self.list_graphlets]
+        self.axes = [os.path.expanduser('%s/pattern%s.svg' % (self.svg_folder, graphlet)) for graphlet in self.list_graphlets]
         self.data = all_temp
     
     def copy_script_js(self):

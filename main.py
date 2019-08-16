@@ -21,7 +21,7 @@ class Representativity_process(object):
     def __init__(self, args):
         self.Data = args['folder']
         self.k = args['k']
-        self.Results = 'Results_%s' % self.k
+        self.Results = '%s/Results_%s' % (args['result_folder'], self.k)
         makedirs(self.Results + '/Positions', exist_ok = True)
         makedirs(self.Results + '/Clusterings', exist_ok = True)
         self.graphlet_range = {4 : range(3, 9), 5 : range(9, 30)}[self.k]
@@ -72,6 +72,7 @@ class Representativity_process(object):
         self.get_already_computed_graphs()
     
         for graph_file in listdir(self.Data):
+            print('    %s' % graph_file)
             if graph_file in self.graphlets_per_graph:
                 continue
                 
@@ -112,9 +113,14 @@ class Representativity_process(object):
         radar.plot_kiviat()
                     
     def process(self):
+        print('Graphlet enumeration')
         self.compute_graphlets()
+        print('done')
+        print('Cluster building')
         self.compute_representativities()
         self.produce_clusterings()
+        print('done')
+        print('results are in %s' % self.Results)
         
         
 if __name__ == '__main__':
@@ -125,6 +131,8 @@ if __name__ == '__main__':
                         help='the graphlet size')
     parser.add_argument('clusters', type=int,
                         help='the number of resulting clusters')
+    parser.add_argument('result_folder', type=str,
+                        help='folder where the results are written')
     args = vars(parser.parse_args())
     Representativity_process(args).process()
         
